@@ -1,0 +1,15 @@
+Wrappers around sklearn.ensemble.RandomForestClassifier for binary
+classification of hyperspectral images.
+
+Use e.g. python3 setup.py install --user for local installation to user directories.
+
+Dependencies:
+
+hyperspectral_utils
+
+Modules/executables:
+
+* random_forest.py: Module, load as import random_forest.
+* hyper_mask_random_forest: Convenience executable, run directly for producing masks as .gif.
+
+Asgeir Bjorgan, NTNU

@@ -1,0 +1,63 @@
+#!/usr/bin/env python3
+
+"""
+Executable for masking and cropping hyperspectral images in one go,
+using a random forest approach for the segmentation.
+
+Asgeir Bjorgan, NTNU
+"""
+
+import argparse
+import os
+import numpy as np
+import scipy.misc
+import random_forest
+from hyperspectral_utils import hyperread, hyperwrite
+from tqdm import tqdm
+
+if __name__ == '__main__':
+    #parse arguments
+    parser = argparse.ArgumentParser(description='Mask image using a pre-trained random forest. The masked image is written to the basename of the input filename with postfixes according to type of output: _mask.png (image mask), _masked.img (masked hyperspectral image), _masked_cropped.img (masked and cropped hyperspectral image).')
+    parser.add_argument('--output-directory', metavar='output_directory', type=str, default='./',
+            help='Output directory for file output. Working directory is assumed by default.')
+    parser.add_argument('--write-mask-only', action='store_true', default=False,
+            help='Write only the mask to file.')
+    parser.add_argument('--autocrop', action='store_true', default=False,
+            help='Crop the images to bounding box of the mask before writing to hyperspectral file.')
+    parser.add_argument('rf_path', nargs=1,
+            help='Path to the random forest file.')
+    parser.add_argument('hyperspectral_files', metavar='hyperspectral_file', type=str, nargs='+',
+            help='Path to hyperspectral image')
+
+    args = parser.parse_args()
+
+    #load random forest from file
+    rf = random_forest.hyper_rf_from_file(args.rf_path[0])
+
+    for i, filename in enumerate(args.hyperspectral_files):
+        output_basepath = os.path.join(args.output_directory, os.path.splitext(os.path.basename(filename))[0])
+        mask_output = output_basepath + '_mask.gif'
+        output_filename = output_basepath + '_masked'
+
+        print('Masking ' + filename + ' (' + str(i+1) + '/' + str(len(args.hyperspectral_files)) + '):')
+
+        #get image mask
+        image_container = hyperread(filename)
+        image = image_container.image()
+
+        image_mask = rf.apply(image)
+
+        scipy.misc.imsave(mask_output, image_mask.astype(int))
+
+        if not args.write_mask_only:
+            if args.autocrop:
+                image, image_mask = random_forest.autocrop(image, image_mask)
+                output_filename += '_cropped'
+
+            #mask image
+            masked_image = random_forest.apply_mask_to_image(image, image_mask, return_as_image=True)
+
+            #write image to disk
+            writer = hyperwrite(output_filename, base_header=image_container.header)
+            writer.write(masked_image)
+            writer.close()
