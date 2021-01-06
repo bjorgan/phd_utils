@@ -95,15 +95,9 @@
   #define __CUDA_ARCH__ 120
 #endif 
 
-#ifndef __CUDA_ARCH__
-#error "__CUDA_ARCH__ undefined!"
-#endif
-
 /////////////////////////////////////////////
 // Compute Capability 2.0
 /////////////////////////////////////////////
-#if __CUDA_ARCH__ == 200
-
 #define NUM_THREADS_PER_BLOCK 896
 // Disable this option to test the effect of true L1 cache (48KB).
 #define CACHE_A_RZ_IN_SMEM
@@ -113,38 +107,6 @@
 #define N_A_RZ_COPIES 4
 // #define USE_64B_ATOMIC_SMEM
 #define USE_64B_ATOMIC_GMEM
-
-/////////////////////////////////////////////
-// Compute Capability 1.2 or 1.3
-/////////////////////////////////////////////
-#elif (__CUDA_ARCH__ == 120) || (__CUDA_ARCH__ == 130)
-
-#define NUM_THREADS_PER_BLOCK 256
-#define CACHE_A_RZ_IN_SMEM
-#define MAX_IR 28
-#define MAX_IZ 128
-#define USE_32B_ELEM_FOR_ARZ_SMEM
-#define N_A_RZ_COPIES 1
-#define USE_64B_ATOMIC_GMEM
-
-/////////////////////////////////////////////
-// Compute Capability 1.1
-/////////////////////////////////////////////
-#elif (__CUDA_ARCH__ == 110)
-
-// We cannot cache A_rz in shared memory because atomic operations to shared
-// memory are not supported.
-#define NUM_THREADS_PER_BLOCK 192
-#define N_A_RZ_COPIES 1
-
-/////////////////////////////////////////////
-// Unsupported Compute Capability
-/////////////////////////////////////////////
-#else
-
-#error "GPUMCML only supports compute capability 1.1 to 2.0!"
-
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////

@@ -26,8 +26,21 @@
 
 #define SINGLE_PRECISION
 
+//max number of characters in safeprimes path
+#define MAX_SAFEPRIMES_PATH 1024
+
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
+//
+#define CUDA_SAFE_CALL(call) \
+do { \
+    cudaError_t err = call; \
+    if (cudaSuccess != err) { \
+        fprintf (stderr, "Cuda error in file '%s' in line %i : %s.", \
+                 __FILE__, __LINE__, cudaGetErrorString(err) ); \
+        exit(EXIT_FAILURE); \
+    } \
+} while (0)
 
 // Various data types
 typedef unsigned long long UINT64;
@@ -191,7 +204,8 @@ extern void usage(const char *prog_name);
 // Return 0 if successfull or a +ive error code.
 extern int interpret_arg(int argc, char* argv[], char **fpath_p,
         unsigned long long* seed,
-        int* ignoreAdetection, unsigned int *num_GPUs);
+        int* ignoreAdetection, unsigned int *num_GPUs,
+        char *safeprimes_path);
 
 extern int read_simulation_data(char* filename,
         SimulationStruct** simulations, int ignoreAdetection);

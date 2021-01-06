@@ -46,6 +46,7 @@ void usage(const char *prog_name)
   printf("  -A: ignore A detection\n");
   printf("  -S: seed for random number generation (MT only)\n");
   printf("  -G: set the number of GPUs this program uses\n");
+  printf("  -p: path to safeprimes file\n");
   printf("\n");
   fflush(stdout);
 }
@@ -55,7 +56,8 @@ void usage(const char *prog_name)
 //////////////////////////////////////////////////////////////////////////////
 int interpret_arg(int argc, char* argv[], char **fpath_p,
                   unsigned long long* seed,
-                  int* ignoreAdetection, unsigned int *num_GPUs)
+                  int* ignoreAdetection, unsigned int *num_GPUs,
+                  char *safeprimes_path)
 {
   int i;
   char *fpath = NULL;
@@ -87,6 +89,10 @@ int interpret_arg(int argc, char* argv[], char **fpath_p,
     else if (sscanf(arg, "G%u", num_GPUs) == 1)
     {
       // <num_GPUs> has been set.
+    }
+    else if (sscanf(arg, "p%s ", safeprimes_path) == 1)
+    {
+      // path to safeprimes
     }
   }
 
