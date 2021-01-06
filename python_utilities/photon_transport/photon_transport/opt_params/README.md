@@ -12,5 +12,5 @@ two-column format,
 
 Use e.g. spectra from https://omlc.org/spectra/ or
 https://omlc.org/spectra/PhotochemCAD/, and make sure the header is prepended
-by `#`. (This repository includes only examples of blood absoption spectra.)
-The filename is used as column header in the resulting absorption dataframe.
+by `#`. The filename is used as column header in the resulting absorption
+dataframe.
