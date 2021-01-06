@@ -12,7 +12,7 @@ import photon_transport
 
 def radiance(phi, j, direction_vector_z_component):
     """
-    Calculate the radiance L from the irradiance phi and photon flux j.
+    Calculate the radiance L from the fluence rate phi and photon flux j.
     """
     return 1.0/(4.0*np.pi)*phi + 3.0/(4.0*np.pi)*j*direction_vector_z_component
 
