@@ -32,10 +32,11 @@ void CheckParm(FILE* , InputStruct * );
 void InitOutputData(InputStruct, OutStruct *);
 void FreeData(InputStruct, OutStruct *);
 double Rspecular(LayerStruct * );
-void LaunchPhoton(double, LayerStruct *, PhotonStruct *);
+void LaunchPhoton(double, LayerStruct *, PhotonStruct *, double);
 void HopDropSpin(InputStruct  *,PhotonStruct *,OutStruct *);
 void SumScaleResult(InputStruct, OutStruct *);
 void WriteResult(InputStruct, OutStruct, char *);
+void ShowVersion(char*);
 
 
 /***********************************************************
@@ -142,7 +143,7 @@ void GetFnameFromArgv(int argc,
 /***********************************************************
  *	Execute Monte Carlo simulation for one independent run.
  ****/
-void DoOneRun(short NumRuns, InputStruct *In_Ptr)
+void DoOneRun(short NumRuns, InputStruct *In_Ptr, double source_depth)
 {
   register long i_photon;	
 	/* index to photon. register for speed.*/
@@ -165,7 +166,7 @@ void DoOneRun(short NumRuns, InputStruct *In_Ptr)
       PredictDoneTime(num_photons - i_photon, num_photons);
       photon_rep *= 10;
     }
-    LaunchPhoton(out_parm.Rsp, In_Ptr->layerspecs, &photon);
+    LaunchPhoton(out_parm.Rsp, In_Ptr->layerspecs, &photon, source_depth);
     do  HopDropSpin(In_Ptr, &photon, &out_parm);
     while (!photon.dead);
   } while(--i_photon);
@@ -189,6 +190,11 @@ char main(int argc, char *argv[])
   short num_runs;	/* number of independent runs. */
   InputStruct in_parm;
 
+  double source_depth = 0.0;
+  if (argc >= 3) {
+      source_depth = strtod(argv[2], NULL);
+  }
+
   ShowVersion("Version 1.2, 1993");
   GetFnameFromArgv(argc, argv, input_filename);
   input_file_ptr = GetFile(input_filename);
@@ -197,7 +203,7 @@ char main(int argc, char *argv[])
   
   while(num_runs--)  {
     ReadParm(input_file_ptr, &in_parm);
-	DoOneRun(num_runs, &in_parm);
+	DoOneRun(num_runs, &in_parm, source_depth);
   }
   
   fclose(input_file_ptr);

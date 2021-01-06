@@ -136,11 +136,22 @@ double Rspecular(LayerStruct * Layerspecs_Ptr)
 
 /***********************************************************
  *	Initialize a photon packet.
+ *
+ *	source_depth: Depth at which to place the source. WARNING: Assumes that this always is within the first layer. Does not take
+ *	the source being diffuse into account. Does not take specular reflection into account.
  ****/
 void LaunchPhoton(double Rspecular,
 				  LayerStruct  * Layerspecs_Ptr,
-				  PhotonStruct * Photon_Ptr)
+				  PhotonStruct * Photon_Ptr, double source_depth)
 {
+  double uz = 1.0;
+  double z = 0.0;
+  if (source_depth > 0) {
+    Rspecular = 0.0;
+    uz = -1.0;
+    z = source_depth;
+  }
+
   Photon_Ptr->w	 	= 1.0 - Rspecular;	
   Photon_Ptr->dead 	= 0;
   Photon_Ptr->layer = 1;
@@ -149,10 +160,10 @@ void LaunchPhoton(double Rspecular,
   
   Photon_Ptr->x 	= 0.0;	
   Photon_Ptr->y	 	= 0.0;	
-  Photon_Ptr->z	 	= 0.0;	
+  Photon_Ptr->z	 	= z;
   Photon_Ptr->ux	= 0.0;	
   Photon_Ptr->uy	= 0.0;	
-  Photon_Ptr->uz	= 1.0;	
+  Photon_Ptr->uz	= uz;	
   
   if((Layerspecs_Ptr[1].mua == 0.0) 
   && (Layerspecs_Ptr[1].mus == 0.0))  { /* glass layer. */
@@ -375,9 +386,11 @@ void Drop(InputStruct  *	In_Ptr,
   /* compute array indices. */
   iz = (short)(Photon_Ptr->z/In_Ptr->dz);
   if(iz>In_Ptr->nz-1) iz=In_Ptr->nz-1;
+  if(iz<0) iz=0;
   
   ir = (short)(sqrt(x*x+y*y)/In_Ptr->dr);
   if(ir>In_Ptr->nr-1) ir=In_Ptr->nr-1;
+  if(ir<0) ir = 0;
   
   /* update photon weight. */
   mua = In_Ptr->layerspecs[layer].mua;

@@ -186,9 +186,9 @@ Boolean CommentLine(char *Buf)
 /***********************************************************
  *	Skip space or comment lines and return a data line only.
  ****/
+char buf[STRLEN];
 char * FindDataLine(FILE *File_Ptr)
 {
-  char buf[STRLEN];
   
   buf[0] = '\0';
   do {	/* skip space or comment lines. */
