@@ -28,7 +28,7 @@ set_target_properties(mnf-lbl-bin PROPERTIES OUTPUT_NAME mnf-linebyline)
 target_link_libraries(mnf-lbl-bin mnf ${BLAS_LIBRARIES} lapacke hyperread)
 
 #mnf utility
-add_executable(mnf-info utilities/main.cpp ${COMMON_SRC})
+add_executable(mnf-info utilities/mnf_info_printer.cpp ${COMMON_SRC})
 target_link_libraries(mnf-info mnf hyperread)
 
 #install libraries, binaries and header files
