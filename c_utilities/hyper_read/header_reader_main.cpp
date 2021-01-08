@@ -1,3 +1,7 @@
+/**
+ * CLI utility for printing hyperspectral image properties to stdout.
+ **/
+
 #include <string>
 #include <iostream>
 #include <getopt.h>
