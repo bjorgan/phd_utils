@@ -48,6 +48,7 @@ void hyperspectral_calibration_info_to_file(const hyperspectral_calibration_info
 }
 
 std::string header_extract_property(std::string, std::string); //from readimage.cpp
+std::string header_extract_array_property(std::string, std::string); //from readimage.cpp
 
 hyperspectral_calibration_info_t hyperspectral_calibration_info_from_file(std::string filename)
 {
@@ -64,7 +65,7 @@ hyperspectral_calibration_info_t hyperspectral_calibration_info_from_file(std::s
 		std::string num_bands = header_extract_property(calibration_text, NUM_BANDS_PROPERTY);
 		std::string num_samples = header_extract_property(calibration_text, NUM_SAMPLES_PROPERTY);
 		std::string adjusted = header_extract_property(calibration_text, ADJUSTED_SPECS_PROPERTY);
-		std::string data = header_extract_property(calibration_text, DATA_PROPERTY);
+		std::string data = header_extract_array_property(calibration_text, DATA_PROPERTY);
 
 		ret_info.refl_standard_positions.start_line = atoi(header_extract_property(calibration_text, START_LINE).c_str());
 		ret_info.refl_standard_positions.end_line = atoi(header_extract_property(calibration_text, END_LINE).c_str());

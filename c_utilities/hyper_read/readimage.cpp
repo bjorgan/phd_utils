@@ -45,6 +45,10 @@ enum header_property_type {
  **/
 std::string header_extract_property(std::string hdrText, std::string property, enum header_property_type header_property_type = SCALAR_VALUE);
 
+/**
+ * Look for array property in header text and return array values as a single string.
+ **/
+std::string header_extract_array_property(std::string hdrText, std::string property);
 
 /**
  * Split wavelength string (`{wlen1, wlen2, ...}` (or whitespace-separated)) into wavelength list.
@@ -398,6 +402,11 @@ std::string getMatch(std::string input_string, regmatch_t *matchArray, int match
 std::string header_extract_property(std::string hdrText, std::string property)
 {
 	return header_extract_property(hdrText, property, SCALAR_VALUE);
+}
+
+std::string header_extract_array_property(std::string hdrText, std::string property)
+{
+	return header_extract_property(hdrText, property, ARRAY_VALUE);
 }
 
 std::string header_extract_property(std::string hdrText, std::string property, enum header_property_type header_property_type)
