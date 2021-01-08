@@ -3,7 +3,6 @@
 #include <getopt.h>
 #include "getopt_long_helpers.h"
 #include <hyperspectral/readimage.h>
-using namespace std;
 
 int main(int argc, char *argv[])
 {
@@ -62,7 +61,7 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "Missing filename.\n");
 		exit(1);
 	}
-	string filename = string(argv[optind]);
+    std::string filename = std::string(argv[optind]);
 
 	struct hyspex_header header;
 	hyperspectral_err_t ret = hyperspectral_read_header(filename.c_str(), &header);
