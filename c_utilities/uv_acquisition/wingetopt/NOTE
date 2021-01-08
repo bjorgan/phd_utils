@@ -1,0 +1,4 @@
+Obtained from https://github.com/alex85k/wingetopt at 2018-03-21.  Hopefully
+not going to have to create more windows applications than this, so this is
+cloned, included directly in the source tree of the uv camera application, and
+.git/ then deleted, and the entire tree included in the main source tree.

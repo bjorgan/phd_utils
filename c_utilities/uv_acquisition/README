@@ -1,0 +1,75 @@
+Compilation
+===========
+
+1. Visual studio
+----------------
+
+* Install Visual Studio 2012 (aka 11.0)
+
+  JAI SDK supports the following compiler versions: 1310 (2003), 1400 (2005),
+  1500 (2008), 1600 (2010), 1700 (2012), 1800 (2012). Other compilers also
+  probably will work fine, but will have to change the compiler version check
+  in ${JAI_SDK_PATH}/SDK/library/CPP/include/base/GCLinkage.h).
+  
+  Visual studio 2012 can be obtained for free by obtaining a microsoft account
+  and by joining the free visual studio program-thing when prompted, after
+  attempting to click on the download link for visual studio 2012.
+  
+  (2012 instead of 2010 since Qt is available in 64 bit edition for 2012, but
+  not 2010, and JAI cannot be installed in 32 bit on 64 bit machine, and there
+  would otherwise be weird incompatibilities.)
+
+* Install Visual Studio SDK (which includes a 64 bit compiler)
+* Verify that Visual Studio now has a 64 bit compiler. :-)
+* Verify that windowscompiler.bat points to the correct installation paths for
+  Visual Studio. Paths should be for the 64 bit compiler of MVSC, for the 2012
+  edition.
+
+2. JAI SDK
+----------
+
+* Install JAI SDK, 64 bit
+* Verify that CMakeLists.txt points to the correct library path for JAI SDK
+
+3. Qt5
+------
+
+* Get and install open source version of Qt from qt.io, version 5.x.x, msvc2012 opengl 64 bit. If not available or installer is broken, search for offline installer, was one available on Qts pages 2018-03-21 (https://download.qt.io/archive/qt/5.2/5.2.0/, qt-windows-opensource-5.2.0-msvc2012_opengl-x86_64-offline.exe)
+* Verify that CMakeLists.txt points to the correct paths for Qt.
+* Copy over DLLs to the build folder: Qt5Gui.dll, Qt5Widgets.dll, Qt5Core.dll, icuin51.dll, icuuc51.dll, icudt51.dll.
+
+4. CMake
+--------
+
+* Install CMake
+
+5. Build instructions
+---------------------
+
+* Create build folder, build/
+* Go to build
+* Run `call ../windowscompile.bat`
+
+For recompilation in the same terminal:
+* Run nmake.exe
+
+The program uses `getopt`, but a Windows version is included for this under
+`wingetopt/`, which is automatically built and linked in CMakeLists.txt.
+See NOTE and README there for origination.
+
+Usage
+=====
+
+The camera takes some time to get ready when first connected (~1 minute?).
+Just run `uv_acquire` repeatedly until a camera is found. The first available
+camera is selected among the available cameras, and the filterdriver interface
+is selected (more efficient than the socketdriver).
+
+See `uv_acquire --help` for usage instructions. The application will default to
+the default exposure time and gain settings unless these are specified.
+Defaults are specified in --help.
+
+The program enables acquisition from the command line, but also provides a GUI
+tool (--live-view) with live view from the camera, real-time adjustment of gain
+and exposure time and histogram display as an aid in adjusting these
+parameters.
