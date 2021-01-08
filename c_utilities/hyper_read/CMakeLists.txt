@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.6)
 project(hyperread_example C CXX)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../common)
 
 add_library(hyperread SHARED readimage.cpp readimage_stdin.cpp)
 target_link_libraries(hyperread boost_regex explain)
@@ -15,7 +15,7 @@ configure_file(readimage_stdin.h hyperspectral/readimage_stdin.h COPYONLY)
 add_executable(hyperread_example examples/read_and_print_image.cpp)
 target_link_libraries(hyperread_example hyperread)
 
-add_executable(header_reader header_reader_main.cpp getopt_long_helpers.cpp)
+add_executable(header_reader header_reader_main.cpp ../common/getopt_long_helpers.cpp)
 target_link_libraries(header_reader hyperread)
 install(TARGETS header_reader DESTINATION bin)
 
